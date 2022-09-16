@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      input {
+        height: 30px;
+        width: 90px;
+      }
+
+      .container {
+        background-color: aquamarine;
+        height: auto;
+        width: auto;
+        
+      }
+
+      .styling {
+        background-color: rgb(12, 123, 219);
+        
+        position: relative;
+        text-align: left;
+        display: flex;
+        
+      }
+
+      #left{
+        display: flex;
+        align-items: center;
+      }
+
+      
+
+      .text-block {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        background-color:transparent;
+        color: black;
+       
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Photos</h1>
+
+    
+    <input type="text" id="width" placeholder="Photo Width" value="">
+    <input type="text" id="dWidth" placeholder="Div Width" value="" />
+    <input type="text" id="imageNumber" placeholder="No. of images" value="" />
+    
+    <button onclick="myfun()">Photos</button> <br /><br />
+    <!-- <button onclick="myFunction()">width</button> -->
+
+
+    <div class="container">
+      <div id="demo" class="styling">
+        
+        <div class="text-block">  
+          <p id="left"><b></b></p>
+        </div>
+      </div>
+      
+    </div>
+
+    <p id="demo1"></p>
+    <!-- <p id="demo2"></p> -->
+    <!-- <p id="demo3"></p> -->
+
+    <script>
+
+      //function myFunction() {
+       // var x = document.getElementById("width").value;
+       // document.getElementById("demo1").innerHTML = x;
+      //}
+
+      function myfun() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "data.json", true);
+        req.send();
+
+        req.onreadystatechange = function () {
+          if (req.readyState == 4 && req.status == 200) {
+            var jsonObj = JSON.parse(req.responseText);
+            console.log(jsonObj);
+            var pro = jsonObj.products;
+
+            console.log(pro);
+
+            function getFields(input, field) {
+              var output = [];
+              for (var i = 0; i < input.length; ++i)
+                output.push(input[i][field]);
+              return output;
+            }
+
+            var result = getFields(pro, "thumbnail");
+            //console.log(result);
+
+            var x = document.getElementById("width").value;
+            //document.getElementById("demo1").innerHTML = x;
+
+            var y = document.getElementById("dWidth").value;
+            //document.getElementById("demo2").innerHTML = y;
+            document.getElementById("demo").style.width = y + "px";
+            document.getElementById("demo").style.height = x + "px";
+
+            var z = document.getElementById("imageNumber").value;
+            //document.getElementById("photo").innerHTML = "+" + z;
+
+            var p = (y/x)-1;
+            var f;
+
+            if (z>p) {
+              f = p;
+            } else {
+              f = z;
+            }
+            
+            var l = z-p;
+            let round = Math.round(l);
+
+            if(round>l){
+              round-=1;
+            }else{
+              round;
+            }
+
+            document.getElementById("left").innerHTML = round ;
+
+            for (var b = 0; b < f; b++) {
+              var image = new Image();
+              image.src = result[b];
+              image.style.width = x + "px";
+              image.style.height = x + "px";
+              image.style.borderRadius = "50%";
+              //image.style.position="normal";
+
+              document.getElementById("demo").appendChild(image);
+            }
+          }
+        };
+
+        
+      }
+
+      
+
+    </script>
+  </body>
+</html>
+
+<!-- function myFunction() {
+    var x = document.getElementById("imageNumber").value;
+    }
+
+myFunction();
+document.getElementById("demo1").innerHTML =x; -->
